@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS account (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(50) NOT NULL,
+    balance     DECIMAL(12,2) DEFAULT 0,
+    type        VARCHAR(20) DEFAULT '活期',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
