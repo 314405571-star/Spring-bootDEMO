@@ -2,6 +2,7 @@ package com.demo.controller;
 import com.demo.common.Result;
 import com.demo.model.Account;
 import com.demo.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+//多态
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
@@ -19,11 +21,11 @@ public class AccountController {
         return service.findById(id);
     }
     @PostMapping("/create")
-    public Result<Account> create(@RequestBody Account account) {
+    public Result<Account> create(@RequestBody @Valid Account account) {
         return service.create(account);
     }
     @PostMapping("/update")
-    public Result<Account> update(@RequestBody Account account) {
+    public Result<Account> update(@RequestBody @Valid Account account) {
         return service.update(account);
     }
     @PostMapping("/delete")
@@ -36,11 +38,11 @@ public class AccountController {
         return service.findByIds(ids);
     }
     @PostMapping("/createBatch")
-    public Result<List<Account>> createBatch(@RequestBody List<Account> accounts) {
+    public Result<List<Account>> createBatch(@RequestBody @Valid List<Account> accounts) {
         return service.createBatch(accounts);
     }
     @PostMapping("/updateBatch")
-    public Result<Integer> updateBatch(@RequestBody List<Account> accounts) {
+    public Result<Integer> updateBatch(@RequestBody @Valid List<Account> accounts) {
         return service.updateBatch(accounts);
     }
     @PostMapping("/deleteBatch")
