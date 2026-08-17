@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *   1. 查询用 LambdaQueryWrapper（lambda 表达式）
  *   2. 更新走 Mapper 的 @Update 注解方法，并判断受影响行数
  *   3. 删除走 Mapper 的 XML 方法
- *   4. 批量操作优先使用 Stream 流
+ *   4. 批量插入走 XML 的 insertBatch（一条 SQL 插多行），其余批量操作用 Stream 流
  *   5. 所有方法都不返回 null，统一返回新建的 Result 对象
  */
 @Service
@@ -89,11 +89,18 @@ public class AccountServiceImpl implements AccountService {
         return Result.ok(sorted);
     }
 
-    /** 批量插：Stream.forEach + 事务 */
+    /** 批量插：一条 SQL 插入多行（不是 for 循环单条插入） */
     @Override
     @Transactional
     public Result<List<Account>> createBatch(List<Account> accounts) {
-        accounts.stream().forEach(mapper::insert);
+        if (accounts == null || accounts.isEmpty()) {
+            return Result.ok(accounts);
+        }
+        int rows = mapper.insertBatch(accounts);
+        // 判断结果：插入的行数应等于传入的条数，否则视为失败
+        if (rows != accounts.size()) {
+            return Result.error("批量插入失败，实际插入 " + rows + " 行");
+        }
         return Result.ok(accounts);
     }
 

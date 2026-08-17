@@ -147,11 +147,13 @@ class AccountServiceTest {
     void 批量插入() {
         Account a1 = new Account("钱七", new BigDecimal("1000.00"), "活期");
         Account a2 = new Account("孙八", new BigDecimal("2000.00"), "定期");
-        when(mapper.insert(any(Account.class))).thenReturn(1);
+        when(mapper.insertBatch(anyList())).thenReturn(2);
+
         Result<List<Account>> r = service.createBatch(Arrays.asList(a1, a2));
+
         assertEquals(200, r.getCode());
         assertEquals(2, r.getData().size());
-        verify(mapper, times(2)).insert(any(Account.class));
+        verify(mapper).insertBatch(anyList());   // 只调用一次批量方法，而不是 N 次单条 insert
     }
 
     @Test

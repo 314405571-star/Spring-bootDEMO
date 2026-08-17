@@ -1,7 +1,7 @@
 package com.demo.common;
 
  //code 约定：
- //  200 = 成功
+ //  000000 = 成功
  //   400 = 参数校验失败
  //  404 = 未找到
  //   500 = 业务/系统异常
@@ -17,7 +17,7 @@ public class Result<T> {
         this.data = data;
     }
     public static <T> Result<T> ok(T data) {
-        return new Result<>(200, "成功", data);
+        return new Result<>(000000, "成功", data);
     }
     public static <T> Result<T> invalid(String message) {
         return new Result<>(400, message, null);
