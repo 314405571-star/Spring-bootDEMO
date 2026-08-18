@@ -2,8 +2,10 @@ package com.demo.controller;
 import com.demo.common.Result;
 import com.demo.model.Account;
 import com.demo.service.AccountService;
+import com.demo.service.AsyncExcelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private AccountService service;
+    @Autowired
+    private AsyncExcelService asyncExcelService;
     @PostMapping("/get")
     public Result<Account> get(@RequestParam Long id) {
         return service.findById(id);
@@ -48,5 +52,14 @@ public class AccountController {
     @PostMapping("/deleteBatch")
     public Result<Integer> deleteBatch(@RequestBody List<Long> ids) {
         return service.deleteBatch(ids);
+    }
+
+    @GetMapping("/export")
+    public Result<String> export(@RequestParam(required = false) String filePath) {
+        String path = (filePath == null || filePath.isBlank())
+                ? System.getProperty("user.dir") + "/export/accounts.xlsx"
+                : filePath;
+        asyncExcelService.exportAccounts(path);
+        return Result.ok("导出任务已启动，文件将写入: " + path);
     }
 }

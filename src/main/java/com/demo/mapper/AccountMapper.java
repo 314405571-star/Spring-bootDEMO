@@ -17,6 +17,7 @@ public interface AccountMapper extends BaseMapper<Account> {
             " WHERE id = #{id}" +
             "</script>")
     int updateAccount(Account account);
+    int insertBatch(@Param("accounts") List<Account> accounts);
     int deleteAccountById(@Param("id") Long id);
     int deleteAccountByIds(@Param("ids") List<Long> ids);
 }
