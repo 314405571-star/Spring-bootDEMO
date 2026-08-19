@@ -1,0 +1,16 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    # 注册中心自己不需要注册自己
+    register-with-eureka: false
+    # 注册中心自己不需要拉取服务列表
+    fetch-registry: false
+  server:
+    # 关闭自我保护，方便演示（不然服务下线后还会显示红色告警）
+    enable-self-preservation: false
